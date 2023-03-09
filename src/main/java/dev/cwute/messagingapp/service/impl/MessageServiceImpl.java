@@ -4,10 +4,13 @@ import dev.cwute.messagingapp.entity.Message;
 import dev.cwute.messagingapp.entity.MessageDto;
 import dev.cwute.messagingapp.entity.MessageView;
 import dev.cwute.messagingapp.entity.UserAccount;
+import dev.cwute.messagingapp.exception.UnauthorizedUser;
 import dev.cwute.messagingapp.exception.UserNotFound;
 import dev.cwute.messagingapp.repository.MessageRepository;
 import dev.cwute.messagingapp.repository.UserAccountRepository;
 import dev.cwute.messagingapp.service.MessageService;
+import dev.cwute.messagingapp.service.UserAccountService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,8 +25,20 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final UserAccountRepository userAccountRepository;
 
+    private final UserAccountService userAccountService;
+
     @Override
-    public long send(MessageDto messageDto) {
+    public long send(MessageDto messageDto, HttpServletRequest request) {
+        var credentials = request.getHeader("Credentials").split(":");
+        var userAcc = new UserAccount().builder()
+                .username(credentials[0])
+                .password(credentials[1])
+                .build();
+
+        if(!userAccountService.checkCredentials(userAcc)){
+            throw new UnauthorizedUser("Unauthorized user");
+        }
+
         var message = messageDto.toMessage();
         var sender = userAccountRepository.findByUsername(messageDto.getSender());
         log.info("Sender: {}", sender.get().getUsername());
