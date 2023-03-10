@@ -14,28 +14,30 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userAccountRepository;
+  private final UserAccountRepository userAccountRepository;
 
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-
-    @Override
-    public boolean checkCredentials(UserAccount userAccount) {
-        log.info("Checking credentials for user: {}", userAccount.getUsername());
-        var userAccountFromDb = userAccountRepository.findByUsername(userAccount.getUsername()).orElseThrow(() -> new UserNotFound("User not found"));
-        if (userAccountFromDb != null) {
-            return passwordEncoder.matches(userAccount.getPassword(), userAccountFromDb.getPassword());
-        }
-        return false;
+  @Override
+  public boolean checkCredentials(UserAccount userAccount) {
+    log.info("Checking credentials for user: {}", userAccount.getUsername());
+    var userAccountFromDb =
+        userAccountRepository
+            .findByUsername(userAccount.getUsername())
+            .orElseThrow(() -> new UserNotFound("User not found"));
+    if (userAccountFromDb != null) {
+      return passwordEncoder.matches(userAccount.getPassword(), userAccountFromDb.getPassword());
     }
+    return false;
+  }
 
-    @Override
-    public long register(UserAccount userAccount) {
-        log.info("Registering user: {}", userAccount.getUsername());
-        userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
-        var savedUser = userAccountRepository.save(userAccount);
-        log.info("User registered: {}", savedUser);
+  @Override
+  public long register(UserAccount userAccount) {
+    log.info("Registering user: {}", userAccount.getUsername());
+    userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
+    var savedUser = userAccountRepository.save(userAccount);
+    log.info("User registered: {}", savedUser);
 
-        return savedUser.getId();
-    }
+    return savedUser.getId();
+  }
 }

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,15 +15,12 @@ import java.util.List;
 @Getter
 @Builder
 public class MessageDto {
-    private String subject;
-    private String message;
-    private String sender;
-    private String[] recipients;
+  private String subject;
+  private String message;
+  private String sender;
+  private String[] recipients;
 
-    public Message toMessage() {
-        return Message.builder()
-                .subject(subject)
-                .message(message)
-                .build();
-    }
+  public Message toMessage() {
+    return Message.builder().subject(subject).message(message).build();
+  }
 }

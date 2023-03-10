@@ -8,7 +8,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +19,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -32,42 +30,40 @@ import java.util.Set;
 @Data
 public class Message {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String subject;
-    private String message;
+  private String subject;
+  private String message;
 
-    @ManyToOne
-    private UserAccount sender;
+  @ManyToOne private UserAccount sender;
 
-    @ManyToMany
-    @JoinTable(
-            name = "message_recipients",
-            joinColumns = @JoinColumn(name = "received_messages_id"),
-            inverseJoinColumns = @JoinColumn(name = "recipients_id"))
-    private List<UserAccount> recipients;
+  @ManyToMany
+  @JoinTable(
+      name = "message_recipients",
+      joinColumns = @JoinColumn(name = "received_messages_id"),
+      inverseJoinColumns = @JoinColumn(name = "recipients_id"))
+  private List<UserAccount> recipients;
 
-    @CreationTimestamp
-    private Instant timestamp;
+  @CreationTimestamp private Instant timestamp;
 
-    public MessageView toMessageView() {
-        if(sender == null) {
-            return MessageView.builder()
-                    .subject(subject)
-                    .message(message)
-                    .sender("Removed by sender")
-                    .recipients(recipients.stream().map(UserAccount::getUsername).toList())
-                    .timestamp(timestamp.toString())
-                    .build();
-        }
-        return MessageView.builder()
-                .subject(subject)
-                .message(message)
-                .sender(sender.getUsername())
-                .recipients(recipients.stream().map(UserAccount::getUsername).toList())
-                .timestamp(timestamp.toString())
-                .build();
+  public MessageView toMessageView() {
+    if (sender == null) {
+      return MessageView.builder()
+          .subject(subject)
+          .message(message)
+          .sender("Removed by sender")
+          .recipients(recipients.stream().map(UserAccount::getUsername).toList())
+          .timestamp(timestamp.toString())
+          .build();
     }
+    return MessageView.builder()
+        .subject(subject)
+        .message(message)
+        .sender(sender.getUsername())
+        .recipients(recipients.stream().map(UserAccount::getUsername).toList())
+        .timestamp(timestamp.toString())
+        .build();
+  }
 }

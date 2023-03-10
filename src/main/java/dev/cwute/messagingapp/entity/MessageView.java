@@ -16,9 +16,9 @@ import java.util.List;
 @Getter
 @Builder
 public class MessageView {
-    private String subject;
-    private String message;
-    private String sender;
-    private List<String> recipients;
-    private String timestamp;
+  private String subject;
+  private String message;
+  private String sender;
+  private List<String> recipients;
+  private String timestamp;
 }

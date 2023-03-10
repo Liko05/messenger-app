@@ -16,7 +16,6 @@ import lombok.ToString;
 
 import java.util.Set;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,18 +25,18 @@ import java.util.Set;
 @Entity
 public class UserAccount {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(unique = true)
-    private String username;
+  @Column(unique = true)
+  private String username;
 
-    private String password;
+  private String password;
 
-    @OneToMany(mappedBy = "sender")
-    private Set<Message> sentMessages;
+  @OneToMany(mappedBy = "sender")
+  private Set<Message> sentMessages;
 
-    @ManyToMany(mappedBy = "recipients")
-    private Set<Message> receivedMessages;
+  @ManyToMany(mappedBy = "recipients")
+  private Set<Message> receivedMessages;
 }

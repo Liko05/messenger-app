@@ -17,32 +17,34 @@ import java.util.Optional;
 @Slf4j
 public class MessageController {
 
-    private final MessageService messageService;
+  private final MessageService messageService;
 
-    @PostMapping("/send")
-    public void sendMessage(@RequestBody MessageDto messageDto) {
-        messageService.send(messageDto);
-    }
+  @PostMapping("/send")
+  public void sendMessage(@RequestBody MessageDto messageDto) {
+    messageService.send(messageDto);
+  }
 
-    @GetMapping("/{username}/received")
-    public ResponseEntity<List<MessageView>> getReceivedMessages(@PathVariable String username) {
-        return ResponseEntity.of(Optional.ofNullable(messageService.getReceivedMessagesForUser(username)));
-    }
+  @GetMapping("/{username}/received")
+  public ResponseEntity<List<MessageView>> getReceivedMessages(@PathVariable String username) {
+    return ResponseEntity.of(
+        Optional.ofNullable(messageService.getReceivedMessagesForUser(username)));
+  }
 
-    @DeleteMapping("/{username}/received/{id}")
-    public ResponseEntity deleteReceivedMessage(@PathVariable String username, @PathVariable long id){
-        messageService.removeReceivedMessage(username, id);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{username}/received/{id}")
+  public ResponseEntity deleteReceivedMessage(
+      @PathVariable String username, @PathVariable long id) {
+    messageService.removeReceivedMessage(username, id);
+    return ResponseEntity.noContent().build();
+  }
 
-    @GetMapping("/{username}/sent")
-    public ResponseEntity<List<MessageView>> getSentMessages(@PathVariable String username){
-        return ResponseEntity.of(Optional.ofNullable(messageService.getSentMessagesForUser(username)));
-    }
+  @GetMapping("/{username}/sent")
+  public ResponseEntity<List<MessageView>> getSentMessages(@PathVariable String username) {
+    return ResponseEntity.of(Optional.ofNullable(messageService.getSentMessagesForUser(username)));
+  }
 
-    @DeleteMapping("/{username}/sent/{id}")
-    public ResponseEntity deleteSentMessage(@PathVariable String username, @PathVariable long id){
-        messageService.deleteSentMessage(username, id);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{username}/sent/{id}")
+  public ResponseEntity deleteSentMessage(@PathVariable String username, @PathVariable long id) {
+    messageService.deleteSentMessage(username, id);
+    return ResponseEntity.noContent().build();
+  }
 }
