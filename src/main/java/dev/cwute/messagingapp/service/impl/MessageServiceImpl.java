@@ -10,7 +10,6 @@ import dev.cwute.messagingapp.repository.MessageRepository;
 import dev.cwute.messagingapp.repository.UserAccountRepository;
 import dev.cwute.messagingapp.service.MessageService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,10 @@ public class MessageServiceImpl extends UserSecurityBase implements MessageServi
 
   private final MessageRepository messageRepository;
 
-  public MessageServiceImpl(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder, MessageRepository messageRepository) {
+  public MessageServiceImpl(
+      UserAccountRepository userAccountRepository,
+      PasswordEncoder passwordEncoder,
+      MessageRepository messageRepository) {
     super(userAccountRepository, passwordEncoder);
     this.messageRepository = messageRepository;
   }
