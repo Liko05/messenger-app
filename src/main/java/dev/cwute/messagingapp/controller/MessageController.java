@@ -1,23 +1,16 @@
 package dev.cwute.messagingapp.controller;
 
-import dev.cwute.messagingapp.entity.MessageDto;
-import dev.cwute.messagingapp.entity.MessageView;
-import dev.cwute.messagingapp.entity.UserAccount;
-import dev.cwute.messagingapp.exception.UnauthorizedUser;
+import dev.cwute.messagingapp.entity.message.MessageDto;
+import dev.cwute.messagingapp.entity.message.MessageView;
 import dev.cwute.messagingapp.service.MessageService;
-import dev.cwute.messagingapp.service.UserAccountService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/messages")
@@ -25,18 +18,38 @@ import java.util.List;
 @Slf4j
 public class MessageController {
 
-    private final MessageService messageService;
+  private final MessageService messageService;
 
-    private final UserAccountService userAccountService;
+  @PostMapping("/send")
+  public void sendMessage(
+      @RequestBody MessageDto messageDto, HttpServletRequest httpServletRequest) {
+    messageService.send(messageDto, httpServletRequest);
+  }
 
-    @PostMapping("/send")
-    public ResponseEntity sendMessage(@RequestBody MessageDto messageDto, HttpServletRequest request) {
-        messageService.send(messageDto, request);
-        return ResponseEntity.ok().build();
-    }
+  @GetMapping("/received")
+  public ResponseEntity<List<MessageView>> getReceivedMessages(
+      HttpServletRequest httpServletRequest) {
+    return ResponseEntity.of(
+        Optional.ofNullable(messageService.getReceivedMessagesForUser(httpServletRequest)));
+  }
 
-    @GetMapping("/{username}/received")
-    public List<MessageView> getReceivedMessages(@PathVariable String username) {
-        return messageService.getMessagesForUser(username);
-    }
+  @DeleteMapping("/received/{id}")
+  public ResponseEntity deleteReceivedMessage(
+      HttpServletRequest httpServletRequest, @PathVariable long id) {
+    messageService.removeReceivedMessage(httpServletRequest, id);
+    return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping("/sent")
+  public ResponseEntity<List<MessageView>> getSentMessages(HttpServletRequest httpServletRequest) {
+    return ResponseEntity.of(
+        Optional.ofNullable(messageService.getSentMessagesForUser(httpServletRequest)));
+  }
+
+  @DeleteMapping("/sent/{id}")
+  public ResponseEntity deleteSentMessage(
+      HttpServletRequest httpServletRequest, @PathVariable long id) {
+    messageService.deleteSentMessage(httpServletRequest, id);
+    return ResponseEntity.noContent().build();
+  }
 }

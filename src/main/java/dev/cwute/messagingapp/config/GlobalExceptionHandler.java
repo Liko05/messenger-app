@@ -10,16 +10,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFound.class)
-    public String handleException(Exception e) {
-        log.error("Exception occurred: {}", e.getMessage());
-        return "User not found";
-    }
+  @ExceptionHandler(UserNotFound.class)
+  public String handleException(Exception e) {
+    log.error("Exception occurred: {}", e.getMessage());
+    return "User not found";
+  }
 
-    @ExceptionHandler(UnauthorizedUser.class)
-    public String handleException2(Exception e) {
-        log.error("Exception occurred: {}", e.getMessage());
-        return "Unauthorized user";
-    }
-
+  @ExceptionHandler(UnauthorizedUser.class)
+  public String handleException2(Exception e) {
+    log.error("Exception occurred: {}", e.getMessage());
+    return "Unauthorized user";
+  }
 }

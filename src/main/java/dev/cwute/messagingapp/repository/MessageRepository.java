@@ -1,12 +1,6 @@
 package dev.cwute.messagingapp.repository;
 
-import dev.cwute.messagingapp.entity.Message;
+import dev.cwute.messagingapp.entity.message.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface MessageRepository extends JpaRepository<Message, Long> {
-    List<Message> findAllByRecipients(String username);
-
-}
-
+public interface MessageRepository extends JpaRepository<Message, Long> {}
