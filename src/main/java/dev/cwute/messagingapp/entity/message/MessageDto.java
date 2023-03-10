@@ -1,13 +1,11 @@
 package dev.cwute.messagingapp.entity.message;
 
-import dev.cwute.messagingapp.entity.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 @Data
 @AllArgsConstructor

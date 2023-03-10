@@ -52,7 +52,7 @@ public class Message {
   public MessageView toMessageView() {
     if (sender == null) {
       return MessageView.builder()
-              .id(id)
+          .id(id)
           .subject(subject)
           .message(message)
           .sender("Removed by sender")
@@ -63,7 +63,7 @@ public class Message {
     return MessageView.builder()
         .subject(subject)
         .message(message)
-            .id(id)
+        .id(id)
         .sender(sender.getUsername())
         .recipients(recipients.stream().map(UserAccount::getUsername).toList())
         .timestamp(timestamp.toString())

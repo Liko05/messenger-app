@@ -26,25 +26,28 @@ public class MessageController {
   }
 
   @GetMapping("/received")
-  public ResponseEntity<List<MessageView>> getReceivedMessages(HttpServletRequest httpServletRequest) {
+  public ResponseEntity<List<MessageView>> getReceivedMessages(
+      HttpServletRequest httpServletRequest) {
     return ResponseEntity.of(
         Optional.ofNullable(messageService.getReceivedMessagesForUser(httpServletRequest)));
   }
 
   @DeleteMapping("/received/{id}")
   public ResponseEntity deleteReceivedMessage(
-     HttpServletRequest httpServletRequest, @PathVariable long id) {
+      HttpServletRequest httpServletRequest, @PathVariable long id) {
     messageService.removeReceivedMessage(httpServletRequest, id);
     return ResponseEntity.noContent().build();
   }
 
   @GetMapping("/sent")
   public ResponseEntity<List<MessageView>> getSentMessages(HttpServletRequest httpServletRequest) {
-    return ResponseEntity.of(Optional.ofNullable(messageService.getSentMessagesForUser(httpServletRequest)));
+    return ResponseEntity.of(
+        Optional.ofNullable(messageService.getSentMessagesForUser(httpServletRequest)));
   }
 
   @DeleteMapping("/sent/{id}")
-  public ResponseEntity deleteSentMessage(HttpServletRequest httpServletRequest, @PathVariable long id) {
+  public ResponseEntity deleteSentMessage(
+      HttpServletRequest httpServletRequest, @PathVariable long id) {
     messageService.deleteSentMessage(httpServletRequest, id);
     return ResponseEntity.noContent().build();
   }

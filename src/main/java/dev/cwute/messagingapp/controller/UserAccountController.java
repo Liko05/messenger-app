@@ -32,7 +32,7 @@ public class UserAccountController {
   }
 
   @GetMapping("")
-  public ResponseEntity<List<String>> getUsers(HttpServletRequest httpServletRequest){
-      return ResponseEntity.of(Optional.ofNullable(userAccountService.getUsers(httpServletRequest)));
+  public ResponseEntity<List<String>> getUsers(HttpServletRequest httpServletRequest) {
+    return ResponseEntity.of(Optional.ofNullable(userAccountService.getUsers(httpServletRequest)));
   }
 }

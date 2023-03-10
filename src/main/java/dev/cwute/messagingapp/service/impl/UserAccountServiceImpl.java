@@ -1,11 +1,9 @@
 package dev.cwute.messagingapp.service.impl;
 
 import dev.cwute.messagingapp.entity.UserAccount;
-import dev.cwute.messagingapp.exception.UserNotFound;
 import dev.cwute.messagingapp.repository.UserAccountRepository;
 import dev.cwute.messagingapp.service.UserAccountService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class UserAccountServiceImpl extends UserSecurityBase implements UserAccountService {
-  public UserAccountServiceImpl(PasswordEncoder passwordEncoder, UserAccountRepository userAccountRepository) {
+  public UserAccountServiceImpl(
+      PasswordEncoder passwordEncoder, UserAccountRepository userAccountRepository) {
     super(userAccountRepository, passwordEncoder);
   }
 
@@ -38,7 +37,7 @@ public class UserAccountServiceImpl extends UserSecurityBase implements UserAcco
   }
 
   @Override
-  public void login(UserAccount userAccount){
+  public void login(UserAccount userAccount) {
     checkCredentials(userAccount);
   }
 }
