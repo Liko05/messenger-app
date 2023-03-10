@@ -2,15 +2,15 @@ package dev.cwute.messagingapp.controller;
 
 import dev.cwute.messagingapp.entity.UserAccount;
 import dev.cwute.messagingapp.service.UserAccountService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -27,7 +27,12 @@ public class UserAccountController {
 
   @PostMapping("/login")
   public ResponseEntity login(@RequestBody UserAccount userAccount) {
-    var loggedIn = userAccountService.checkCredentials(userAccount);
-    return ResponseEntity.ok(loggedIn);
+    userAccountService.login(userAccount);
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("")
+  public ResponseEntity<List<String>> getUsers(HttpServletRequest httpServletRequest){
+      return ResponseEntity.of(Optional.ofNullable(userAccountService.getUsers(httpServletRequest)));
   }
 }

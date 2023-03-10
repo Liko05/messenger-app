@@ -1,5 +1,6 @@
-package dev.cwute.messagingapp.entity;
+package dev.cwute.messagingapp.entity.message;
 
+import dev.cwute.messagingapp.entity.UserAccount;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -51,6 +52,7 @@ public class Message {
   public MessageView toMessageView() {
     if (sender == null) {
       return MessageView.builder()
+              .id(id)
           .subject(subject)
           .message(message)
           .sender("Removed by sender")
@@ -61,6 +63,7 @@ public class Message {
     return MessageView.builder()
         .subject(subject)
         .message(message)
+            .id(id)
         .sender(sender.getUsername())
         .recipients(recipients.stream().map(UserAccount::getUsername).toList())
         .timestamp(timestamp.toString())

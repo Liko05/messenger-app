@@ -1,5 +1,6 @@
 package dev.cwute.messagingapp.entity;
 
+import dev.cwute.messagingapp.entity.message.Message;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

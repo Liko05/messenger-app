@@ -1,8 +1,9 @@
 package dev.cwute.messagingapp.controller;
 
-import dev.cwute.messagingapp.entity.MessageDto;
-import dev.cwute.messagingapp.entity.MessageView;
+import dev.cwute.messagingapp.entity.message.MessageDto;
+import dev.cwute.messagingapp.entity.message.MessageView;
 import dev.cwute.messagingapp.service.MessageService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,27 +25,27 @@ public class MessageController {
     messageService.send(messageDto);
   }
 
-  @GetMapping("/{username}/received")
-  public ResponseEntity<List<MessageView>> getReceivedMessages(@PathVariable String username) {
+  @GetMapping("/received")
+  public ResponseEntity<List<MessageView>> getReceivedMessages(HttpServletRequest httpServletRequest) {
     return ResponseEntity.of(
-        Optional.ofNullable(messageService.getReceivedMessagesForUser(username)));
+        Optional.ofNullable(messageService.getReceivedMessagesForUser(httpServletRequest)));
   }
 
-  @DeleteMapping("/{username}/received/{id}")
+  @DeleteMapping("/received/{id}")
   public ResponseEntity deleteReceivedMessage(
-      @PathVariable String username, @PathVariable long id) {
-    messageService.removeReceivedMessage(username, id);
+     HttpServletRequest httpServletRequest, @PathVariable long id) {
+    messageService.removeReceivedMessage(httpServletRequest, id);
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping("/{username}/sent")
-  public ResponseEntity<List<MessageView>> getSentMessages(@PathVariable String username) {
-    return ResponseEntity.of(Optional.ofNullable(messageService.getSentMessagesForUser(username)));
+  @GetMapping("/sent")
+  public ResponseEntity<List<MessageView>> getSentMessages(HttpServletRequest httpServletRequest) {
+    return ResponseEntity.of(Optional.ofNullable(messageService.getSentMessagesForUser(httpServletRequest)));
   }
 
-  @DeleteMapping("/{username}/sent/{id}")
-  public ResponseEntity deleteSentMessage(@PathVariable String username, @PathVariable long id) {
-    messageService.deleteSentMessage(username, id);
+  @DeleteMapping("/sent/{id}")
+  public ResponseEntity deleteSentMessage(HttpServletRequest httpServletRequest, @PathVariable long id) {
+    messageService.deleteSentMessage(httpServletRequest, id);
     return ResponseEntity.noContent().build();
   }
 }

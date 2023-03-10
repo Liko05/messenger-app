@@ -1,4 +1,4 @@
-package dev.cwute.messagingapp.entity;
+package dev.cwute.messagingapp.entity.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 @Builder
 public class MessageView {
+  private long id;
   private String subject;
   private String message;
   private String sender;

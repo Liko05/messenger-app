@@ -1,5 +1,6 @@
-package dev.cwute.messagingapp.entity;
+package dev.cwute.messagingapp.entity.message;
 
+import dev.cwute.messagingapp.entity.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,27 +1,32 @@
 package dev.cwute.messagingapp.service.impl;
 
-import dev.cwute.messagingapp.entity.Message;
-import dev.cwute.messagingapp.entity.MessageDto;
-import dev.cwute.messagingapp.entity.MessageView;
+import dev.cwute.messagingapp.entity.message.Message;
+import dev.cwute.messagingapp.entity.message.MessageDto;
+import dev.cwute.messagingapp.entity.message.MessageView;
 import dev.cwute.messagingapp.entity.UserAccount;
 import dev.cwute.messagingapp.exception.UnauthorizedUser;
 import dev.cwute.messagingapp.exception.UserNotFound;
 import dev.cwute.messagingapp.repository.MessageRepository;
 import dev.cwute.messagingapp.repository.UserAccountRepository;
 import dev.cwute.messagingapp.service.MessageService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @Slf4j
-@AllArgsConstructor
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl extends UserSecurityBase implements MessageService {
 
   private final MessageRepository messageRepository;
-  private final UserAccountRepository userAccountRepository;
+
+  public MessageServiceImpl(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder, MessageRepository messageRepository) {
+    super(userAccountRepository, passwordEncoder);
+    this.messageRepository = messageRepository;
+  }
 
   @Override
   public long send(MessageDto messageDto) {
@@ -38,7 +43,8 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
-  public List<MessageView> getReceivedMessagesForUser(String username) {
+  public List<MessageView> getReceivedMessagesForUser(HttpServletRequest httpServletRequest) {
+    var username = checkCredentials(httpServletRequest);
     var user =
         userAccountRepository
             .findByUsername(username)
@@ -47,7 +53,8 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
-  public List<MessageView> getSentMessagesForUser(String username) {
+  public List<MessageView> getSentMessagesForUser(HttpServletRequest httpServletRequest) {
+    var username = checkCredentials(httpServletRequest);
     var user =
         userAccountRepository
             .findByUsername(username)
@@ -56,7 +63,8 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
-  public void removeReceivedMessage(String username, long messageId) {
+  public void removeReceivedMessage(HttpServletRequest httpServletRequest, long messageId) {
+    var username = checkCredentials(httpServletRequest);
     log.info("Trying to remove message: {} for user: {}", messageId, username);
     userAccountRepository
         .findByUsername(username)
@@ -72,7 +80,8 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
-  public void deleteSentMessage(String username, long messageId) {
+  public void deleteSentMessage(HttpServletRequest httpServletRequest, long messageId) {
+    var username = checkCredentials(httpServletRequest);
     log.info("Trying to remove sent message: {} for user: {}", messageId, username);
     userAccountRepository
         .findByUsername(username)

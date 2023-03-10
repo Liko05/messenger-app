@@ -1,6 +1,6 @@
 package dev.cwute.messagingapp.repository;
 
-import dev.cwute.messagingapp.entity.Message;
+import dev.cwute.messagingapp.entity.message.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
