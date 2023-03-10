@@ -19,18 +19,21 @@ public class UserAccountController {
 
   private final UserAccountService userAccountService;
 
+  @CrossOrigin
   @PostMapping("/register")
   public ResponseEntity register(@RequestBody UserAccount userAccount) throws URISyntaxException {
     var registered = userAccountService.register(userAccount);
     return ResponseEntity.created(new URI("/api/v1/users/" + registered)).build();
   }
 
+  @CrossOrigin
   @PostMapping("/login")
   public ResponseEntity login(@RequestBody UserAccount userAccount) {
     userAccountService.login(userAccount);
     return ResponseEntity.ok().build();
   }
 
+  @CrossOrigin
   @GetMapping("")
   public ResponseEntity<List<String>> getUsers(HttpServletRequest httpServletRequest) {
     return ResponseEntity.of(Optional.ofNullable(userAccountService.getUsers(httpServletRequest)));

@@ -20,12 +20,14 @@ public class MessageController {
 
   private final MessageService messageService;
 
+  @CrossOrigin
   @PostMapping("/send")
   public void sendMessage(
       @RequestBody MessageDto messageDto, HttpServletRequest httpServletRequest) {
     messageService.send(messageDto, httpServletRequest);
   }
 
+  @CrossOrigin
   @GetMapping("/received")
   public ResponseEntity<List<MessageView>> getReceivedMessages(
       HttpServletRequest httpServletRequest) {
@@ -33,6 +35,7 @@ public class MessageController {
         Optional.ofNullable(messageService.getReceivedMessagesForUser(httpServletRequest)));
   }
 
+  @CrossOrigin
   @DeleteMapping("/received/{id}")
   public ResponseEntity deleteReceivedMessage(
       HttpServletRequest httpServletRequest, @PathVariable long id) {
@@ -40,12 +43,14 @@ public class MessageController {
     return ResponseEntity.noContent().build();
   }
 
+  @CrossOrigin
   @GetMapping("/sent")
   public ResponseEntity<List<MessageView>> getSentMessages(HttpServletRequest httpServletRequest) {
     return ResponseEntity.of(
         Optional.ofNullable(messageService.getSentMessagesForUser(httpServletRequest)));
   }
 
+  @CrossOrigin
   @DeleteMapping("/sent/{id}")
   public ResponseEntity deleteSentMessage(
       HttpServletRequest httpServletRequest, @PathVariable long id) {
