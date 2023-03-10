@@ -53,6 +53,15 @@ public class Message {
     private Instant timestamp;
 
     public MessageView toMessageView() {
+        if(sender == null) {
+            return MessageView.builder()
+                    .subject(subject)
+                    .message(message)
+                    .sender("Removed by sender")
+                    .recipients(recipients.stream().map(UserAccount::getUsername).toList())
+                    .timestamp(timestamp.toString())
+                    .build();
+        }
         return MessageView.builder()
                 .subject(subject)
                 .message(message)

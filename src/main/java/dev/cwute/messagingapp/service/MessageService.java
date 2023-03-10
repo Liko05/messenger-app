@@ -7,5 +7,9 @@ import java.util.List;
 
 public interface MessageService {
     long send(MessageDto messageDto);
-    List<MessageView> getMessagesForUser(String username);
+    List<MessageView> getReceivedMessagesForUser(String username);
+    List<MessageView> getSentMessagesForUser(String username);
+    void removeReceivedMessage(String username, long messageId);
+
+    void deleteSentMessage(String username, long messageId);
 }
