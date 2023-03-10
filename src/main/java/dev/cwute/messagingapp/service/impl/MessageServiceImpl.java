@@ -4,6 +4,7 @@ import dev.cwute.messagingapp.entity.message.Message;
 import dev.cwute.messagingapp.entity.message.MessageDto;
 import dev.cwute.messagingapp.entity.message.MessageView;
 import dev.cwute.messagingapp.entity.UserAccount;
+import dev.cwute.messagingapp.exception.MessageNotFound;
 import dev.cwute.messagingapp.exception.UnauthorizedUser;
 import dev.cwute.messagingapp.exception.UserNotFound;
 import dev.cwute.messagingapp.repository.MessageRepository;
@@ -31,9 +32,11 @@ public class MessageServiceImpl extends UserSecurityBase implements MessageServi
   }
 
   @Override
-  public long send(MessageDto messageDto) {
+  public long send(MessageDto messageDto, HttpServletRequest httpServletRequest) {
+    var username = checkCredentials(httpServletRequest);
+
     var message = messageDto.toMessage();
-    var sender = userAccountRepository.findByUsername(messageDto.getSender());
+    var sender = userAccountRepository.findByUsername(username);
     var recipients = userAccountRepository.findAllByUsernameIn(messageDto.getRecipients());
 
     message.setSender(sender.orElseThrow(() -> new UserNotFound("Sender not found")));
@@ -89,9 +92,8 @@ public class MessageServiceImpl extends UserSecurityBase implements MessageServi
         .findByUsername(username)
         .orElseThrow(() -> new UserNotFound("User not found"));
     var message =
-        messageRepository.findById(messageId).orElseThrow(() -> new RuntimeException("Not found"));
-
-    if (!message.getSender().getUsername().equals(username)) {
+        messageRepository.findById(messageId).orElseThrow(() -> new MessageNotFound("Not found"));
+    if (message.getSender() == null || !message.getSender().getUsername().equals(username)) {
       throw new UnauthorizedUser("You are not the sender of this message.");
     }
 

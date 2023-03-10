@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface MessageService {
-  long send(MessageDto messageDto);
+  long send(MessageDto messageDto, HttpServletRequest httpServletRequest);
 
   List<MessageView> getReceivedMessagesForUser(HttpServletRequest httpServletRequest);
 

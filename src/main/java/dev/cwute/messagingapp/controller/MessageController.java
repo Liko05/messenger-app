@@ -21,8 +21,8 @@ public class MessageController {
   private final MessageService messageService;
 
   @PostMapping("/send")
-  public void sendMessage(@RequestBody MessageDto messageDto) {
-    messageService.send(messageDto);
+  public void sendMessage(@RequestBody MessageDto messageDto, HttpServletRequest httpServletRequest) {
+    messageService.send(messageDto, httpServletRequest);
   }
 
   @GetMapping("/received")
