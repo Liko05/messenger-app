@@ -19,7 +19,7 @@ public abstract class UserSecurityBase {
     }
 
     public String checkCredentials(HttpServletRequest httpServletRequest) {
-        var credentials = httpServletRequest.getHeader("Credentials").split(":");
+        var credentials = httpServletRequest.getHeader("Credentials").split(":"); //TODO first null check
         if(credentials.length != 2 || credentials == null){
             throw new UnauthorizedUser("Missing header");
         }
