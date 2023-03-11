@@ -20,11 +20,10 @@ public abstract class UserSecurityBase {
   }
 
   public String checkCredentials(HttpServletRequest httpServletRequest) {
-    var header =
-        httpServletRequest.getHeader("Credentials");
+    var header = httpServletRequest.getHeader("Credentials");
 
-    if(header == null){
-        throw new UnauthorizedUser("No credentials provided");
+    if (header == null) {
+      throw new UnauthorizedUser("No credentials provided");
     }
 
     var credentials = header.split(":");
