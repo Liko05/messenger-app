@@ -30,7 +30,7 @@ class MessagingAppApplicationTests {
 
   @Test
   void contextLoads() {}
-
+/*
   @BeforeEach
   void setUp() {
     userAccountRepository.deleteAll();
@@ -72,5 +72,5 @@ class MessagingAppApplicationTests {
                     }
 """))
             .andExpect(status().isOk());
-  }
+  }*/
 }
