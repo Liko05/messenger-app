@@ -20,11 +20,19 @@ public abstract class UserSecurityBase {
   }
 
   public String checkCredentials(HttpServletRequest httpServletRequest) {
-    var credentials =
-        httpServletRequest.getHeader("Credentials").split(":"); // TODO first null check
-    if (credentials.length != 2 || credentials == null) {
+    var header =
+        httpServletRequest.getHeader("Credentials");
+
+    if(header == null){
+        throw new UnauthorizedUser("No credentials provided");
+    }
+
+    var credentials = header.split(":");
+
+    if (credentials.length != 2) {
       throw new UnauthorizedUser("Missing header");
     }
+
     var userAccount =
         new UserAccount().builder().password(credentials[1]).username(credentials[0]).build();
 
@@ -48,10 +56,12 @@ public abstract class UserSecurityBase {
         userAccountRepository
             .findByUsername(userAccount.getUsername())
             .orElseThrow(() -> new UserNotFound("User not found"));
+
     if (userAccountFromDb != null
         && passwordEncoder.matches(userAccount.getPassword(), userAccountFromDb.getPassword())) {
       return userAccount.getUsername();
     }
+
     throw new UnauthorizedUser("Unauthorized user");
   }
 }

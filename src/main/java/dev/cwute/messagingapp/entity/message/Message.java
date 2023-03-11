@@ -30,12 +30,12 @@ import java.util.List;
 @Entity
 @Data
 public class Message {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String subject;
+
   private String message;
 
   @ManyToOne private UserAccount sender;
