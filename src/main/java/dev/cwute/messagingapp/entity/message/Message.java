@@ -40,6 +40,8 @@ public class Message {
 
   @ManyToOne private UserAccount sender;
 
+  private String senderName;
+
   @ManyToMany
   @JoinTable(
       name = "message_recipients",
@@ -47,25 +49,17 @@ public class Message {
       inverseJoinColumns = @JoinColumn(name = "recipients_id"))
   private List<UserAccount> recipients;
 
+  private String recipientNames;
+
   @CreationTimestamp private Instant timestamp;
 
   public MessageView toMessageView() {
-    if (sender == null) {
-      return MessageView.builder()
-          .id(id)
-          .subject(subject)
-          .message(message)
-          .sender("Removed by sender")
-          .recipients(recipients.stream().map(UserAccount::getUsername).toList())
-          .timestamp(timestamp.toString())
-          .build();
-    }
     return MessageView.builder()
         .subject(subject)
         .message(message)
         .id(id)
-        .sender(sender.getUsername())
-        .recipients(recipients.stream().map(UserAccount::getUsername).toList())
+        .sender(senderName)
+        .recipients(recipientNames)
         .timestamp(timestamp.toString())
         .build();
   }

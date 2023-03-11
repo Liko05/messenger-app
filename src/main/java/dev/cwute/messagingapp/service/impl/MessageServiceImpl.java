@@ -40,8 +40,12 @@ public class MessageServiceImpl extends UserSecurityBase implements MessageServi
     var recipients = userAccountRepository.findAllByUsernameIn(messageDto.getRecipients());
 
     message.setSender(sender.orElseThrow(() -> new UserNotFound("Sender not found")));
+    message.setSenderName(sender.get().getUsername());
     List<UserAccount> recipientList = (List<UserAccount>) recipients;
     message.setRecipients(recipientList);
+
+    var recipientNames = recipientList.stream().map(UserAccount::getUsername).toList();
+    message.setRecipientNames(recipientNames.toString());
 
     var savedMessage = messageRepository.save(message);
     return savedMessage.getId();
