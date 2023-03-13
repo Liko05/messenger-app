@@ -24,7 +24,7 @@
       password: password,
     }
 
-    fetch('http://localhost:727/api/v1/users/register', {
+    fetch('https://mess-api.cwute.dev/api/v1/users/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
