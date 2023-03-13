@@ -6,9 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository for UserAccount entity.
+ */
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
-  Optional<UserAccount> findByUsername(String username);
+    Optional<UserAccount> findByUsername(String username);
 
-  Iterable<UserAccount> findAllByUsernameIn(String[] usernames);
+    Iterable<UserAccount> findAllByUsernameIn(String[] usernames);
 }

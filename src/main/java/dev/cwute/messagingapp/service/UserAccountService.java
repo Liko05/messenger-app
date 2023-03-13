@@ -5,10 +5,13 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
+/**
+ * Service for user account operations.
+ */
 public interface UserAccountService {
-  long register(UserAccount userAccount);
+    long register(UserAccount userAccount);
 
-  List<String> getUsers(HttpServletRequest httpServletRequest);
+    List<String> getUsers(HttpServletRequest httpServletRequest);
 
-  void login(UserAccount userAccount);
+    void login(UserAccount userAccount);
 }

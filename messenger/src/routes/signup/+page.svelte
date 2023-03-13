@@ -5,7 +5,7 @@
   let username
 
   function submit() {
-    if(username != undefined || isEmptyOrSpaces(username)){
+    if(username == undefined || isEmptyOrSpaces(username)){
       alert("Username cannot be empty")
       return
     }
@@ -44,7 +44,7 @@
   }
 
   function isEmptyOrSpaces(str) {
-		return str === null || str.match(/^ *$/) !== null || str == '' || str == undefined;
+		return str === null || str.match(/^ *$/) !== null;
 	}
 </script>
 
