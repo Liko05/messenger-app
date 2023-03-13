@@ -17,127 +17,125 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Service class for handling message related operations.
- */
+/** Service class for handling message related operations. */
 @Service
 @Slf4j
 public class MessageServiceImpl extends UserSecurityBase implements MessageService {
 
-    private final MessageRepository messageRepository;
+  private final MessageRepository messageRepository;
 
-    public MessageServiceImpl(
-            UserAccountRepository userAccountRepository,
-            PasswordEncoder passwordEncoder,
-            MessageRepository messageRepository) {
-        super(userAccountRepository, passwordEncoder);
-        this.messageRepository = messageRepository;
-    }
+  public MessageServiceImpl(
+      UserAccountRepository userAccountRepository,
+      PasswordEncoder passwordEncoder,
+      MessageRepository messageRepository) {
+    super(userAccountRepository, passwordEncoder);
+    this.messageRepository = messageRepository;
+  }
 
-    /**
-     * Sends a message.
-     *
-     * @param messageDto         the message to be created
-     * @param httpServletRequest the HTTP request (used for authentication and user lookup)
-     * @return the created message
-     */
-    @Override
-    public long send(MessageDto messageDto, HttpServletRequest httpServletRequest) {
-        var username = checkCredentials(httpServletRequest);
+  /**
+   * Sends a message.
+   *
+   * @param messageDto the message to be created
+   * @param httpServletRequest the HTTP request (used for authentication and user lookup)
+   * @return the created message
+   */
+  @Override
+  public long send(MessageDto messageDto, HttpServletRequest httpServletRequest) {
+    var username = checkCredentials(httpServletRequest);
 
-        var message = messageDto.toMessage();
-        var sender = userAccountRepository.findByUsername(username);
-        var recipients = userAccountRepository.findAllByUsernameIn(messageDto.getRecipients());
+    var message = messageDto.toMessage();
+    var sender = userAccountRepository.findByUsername(username);
+    var recipients = userAccountRepository.findAllByUsernameIn(messageDto.getRecipients());
 
-        message.setSender(sender.orElseThrow(() -> new UserNotFound("Sender not found")));
-        message.setSenderName(sender.get().getUsername());
-        List<UserAccount> recipientList = (List<UserAccount>) recipients;
-        message.setRecipients(recipientList);
+    message.setSender(sender.orElseThrow(() -> new UserNotFound("Sender not found")));
+    message.setSenderName(sender.get().getUsername());
+    List<UserAccount> recipientList = (List<UserAccount>) recipients;
+    message.setRecipients(recipientList);
 
-        var recipientNames = recipientList.stream().map(UserAccount::getUsername).toList();
-        message.setRecipientNames(recipientNames.toString().replace("[", "").replace("]", ""));
+    var recipientNames = recipientList.stream().map(UserAccount::getUsername).toList();
+    message.setRecipientNames(recipientNames.toString().replace("[", "").replace("]", ""));
 
-        var savedMessage = messageRepository.save(message);
-        return savedMessage.getId();
-    }
+    var savedMessage = messageRepository.save(message);
+    return savedMessage.getId();
+  }
 
-    /**
-     * Gets a list of messages received by user.
-     *
-     * @param httpServletRequest the HTTP request (used for authentication and user lookup)
-     * @return the retrieved messages
-     */
-    @Override
-    public List<MessageView> getReceivedMessagesForUser(HttpServletRequest httpServletRequest) {
-        var username = checkCredentials(httpServletRequest);
-        var user =
-                userAccountRepository
-                        .findByUsername(username)
-                        .orElseThrow(() -> new UserNotFound("User not found"));
-        return user.getReceivedMessages().stream().map(Message::toMessageView).toList();
-    }
-
-    /**
-     * Gets a list of sent messages for user.
-     *
-     * @param httpServletRequest the HTTP request (used for authentication and user lookup)
-     * @return the retrieved messages
-     */
-    @Override
-    public List<MessageView> getSentMessagesForUser(HttpServletRequest httpServletRequest) {
-        var username = checkCredentials(httpServletRequest);
-        var user =
-                userAccountRepository
-                        .findByUsername(username)
-                        .orElseThrow(() -> new UserNotFound("User not found"));
-        return user.getSentMessages().stream().map(Message::toMessageView).toList();
-    }
-
-    /**
-     * Removes a received message by id.
-     *
-     * @param httpServletRequest the HTTP request (used for authentication and user lookup)
-     * @param messageId
-     */
-    @Override
-    public void removeReceivedMessage(HttpServletRequest httpServletRequest, long messageId) {
-        var username = checkCredentials(httpServletRequest);
-        log.info("Trying to remove message: {} for user: {}", messageId, username);
+  /**
+   * Gets a list of messages received by user.
+   *
+   * @param httpServletRequest the HTTP request (used for authentication and user lookup)
+   * @return the retrieved messages
+   */
+  @Override
+  public List<MessageView> getReceivedMessagesForUser(HttpServletRequest httpServletRequest) {
+    var username = checkCredentials(httpServletRequest);
+    var user =
         userAccountRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new UserNotFound("User not found"));
-        var message =
-                messageRepository.findById(messageId).orElseThrow(() -> new RuntimeException("Not found"));
+            .findByUsername(username)
+            .orElseThrow(() -> new UserNotFound("User not found"));
+    return user.getReceivedMessages().stream().map(Message::toMessageView).toList();
+  }
 
-        var recipients = message.getRecipients();
-        recipients.removeIf(userAccount -> userAccount.getUsername().equals(username));
-
-        message.setRecipients(recipients);
-        messageRepository.save(message);
-    }
-
-    /**
-     * Removes a sent message by id.
-     *
-     * @param httpServletRequest the HTTP request (used for authentication and user lookup)
-     * @param messageId
-     */
-    @Override
-    public void deleteSentMessage(HttpServletRequest httpServletRequest, long messageId) {
-        var username = checkCredentials(httpServletRequest);
-        log.info("Trying to remove sent message: {} for user: {}", messageId, username);
+  /**
+   * Gets a list of sent messages for user.
+   *
+   * @param httpServletRequest the HTTP request (used for authentication and user lookup)
+   * @return the retrieved messages
+   */
+  @Override
+  public List<MessageView> getSentMessagesForUser(HttpServletRequest httpServletRequest) {
+    var username = checkCredentials(httpServletRequest);
+    var user =
         userAccountRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new UserNotFound("User not found"));
+            .findByUsername(username)
+            .orElseThrow(() -> new UserNotFound("User not found"));
+    return user.getSentMessages().stream().map(Message::toMessageView).toList();
+  }
 
-        var message =
-                messageRepository.findById(messageId).orElseThrow(() -> new MessageNotFound("Not found"));
+  /**
+   * Removes a received message by id.
+   *
+   * @param httpServletRequest the HTTP request (used for authentication and user lookup)
+   * @param messageId
+   */
+  @Override
+  public void removeReceivedMessage(HttpServletRequest httpServletRequest, long messageId) {
+    var username = checkCredentials(httpServletRequest);
+    log.info("Trying to remove message: {} for user: {}", messageId, username);
+    userAccountRepository
+        .findByUsername(username)
+        .orElseThrow(() -> new UserNotFound("User not found"));
+    var message =
+        messageRepository.findById(messageId).orElseThrow(() -> new RuntimeException("Not found"));
 
-        if (message.getSender() == null || !message.getSender().getUsername().equals(username)) {
-            throw new UnauthorizedUser("You are not the sender of this message.");
-        }
+    var recipients = message.getRecipients();
+    recipients.removeIf(userAccount -> userAccount.getUsername().equals(username));
 
-        message.setSender(null);
-        messageRepository.save(message);
+    message.setRecipients(recipients);
+    messageRepository.save(message);
+  }
+
+  /**
+   * Removes a sent message by id.
+   *
+   * @param httpServletRequest the HTTP request (used for authentication and user lookup)
+   * @param messageId
+   */
+  @Override
+  public void deleteSentMessage(HttpServletRequest httpServletRequest, long messageId) {
+    var username = checkCredentials(httpServletRequest);
+    log.info("Trying to remove sent message: {} for user: {}", messageId, username);
+    userAccountRepository
+        .findByUsername(username)
+        .orElseThrow(() -> new UserNotFound("User not found"));
+
+    var message =
+        messageRepository.findById(messageId).orElseThrow(() -> new MessageNotFound("Not found"));
+
+    if (message.getSender() == null || !message.getSender().getUsername().equals(username)) {
+      throw new UnauthorizedUser("You are not the sender of this message.");
     }
+
+    message.setSender(null);
+    messageRepository.save(message);
+  }
 }

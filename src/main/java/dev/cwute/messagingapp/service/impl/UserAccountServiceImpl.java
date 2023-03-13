@@ -10,55 +10,52 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Service for user account operations.
- */
+/** Service for user account operations. */
 @Service
 @Slf4j
 public class UserAccountServiceImpl extends UserSecurityBase implements UserAccountService {
-    public UserAccountServiceImpl(
-            PasswordEncoder passwordEncoder, UserAccountRepository userAccountRepository) {
-        super(userAccountRepository, passwordEncoder);
-    }
+  public UserAccountServiceImpl(
+      PasswordEncoder passwordEncoder, UserAccountRepository userAccountRepository) {
+    super(userAccountRepository, passwordEncoder);
+  }
 
-    /**
-     * Registers a new user account.
-     *
-     * @param userAccount the user account to register
-     * @return the id of the newly created user account
-     */
-    @Override
-    public long register(UserAccount userAccount) {
-        log.info("Registering user: {}", userAccount.getUsername());
-        userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
-        var savedUser = userAccountRepository.save(userAccount);
-        log.info("User registered: {}", savedUser);
+  /**
+   * Registers a new user account.
+   *
+   * @param userAccount the user account to register
+   * @return the id of the newly created user account
+   */
+  @Override
+  public long register(UserAccount userAccount) {
+    log.info("Registering user: {}", userAccount.getUsername());
+    userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
+    var savedUser = userAccountRepository.save(userAccount);
+    log.info("User registered: {}", savedUser);
 
-        return savedUser.getId();
-    }
+    return savedUser.getId();
+  }
 
-    /**
-     * Gets a list of all user accounts.
-     *
-     * @param httpServletRequest the request
-     * @return a list of all user accounts
-     */
+  /**
+   * Gets a list of all user accounts.
+   *
+   * @param httpServletRequest the request
+   * @return a list of all user accounts
+   */
+  @Override
+  public List<String> getUsers(HttpServletRequest httpServletRequest) {
+    checkCredentials(httpServletRequest);
+    log.info("Retrieving all usernames");
+    var users = userAccountRepository.findAll();
+    return users.stream().map(UserAccount::getUsername).toList();
+  }
 
-    @Override
-    public List<String> getUsers(HttpServletRequest httpServletRequest) {
-        checkCredentials(httpServletRequest);
-        log.info("Retrieving all usernames");
-        var users = userAccountRepository.findAll();
-        return users.stream().map(UserAccount::getUsername).toList();
-    }
-
-    /**
-     * Logs in a user.
-     *
-     * @param userAccount
-     */
-    @Override
-    public void login(UserAccount userAccount) {
-        checkCredentials(userAccount);
-    }
+  /**
+   * Logs in a user.
+   *
+   * @param userAccount
+   */
+  @Override
+  public void login(UserAccount userAccount) {
+    checkCredentials(userAccount);
+  }
 }

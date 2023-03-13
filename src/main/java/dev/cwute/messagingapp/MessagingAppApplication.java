@@ -8,10 +8,10 @@ public class MessagingAppApplication {
 
   /**
    * Main method to start the application.
+   *
    * @param args
    */
-
-    public static void main(String[] args) {
-        SpringApplication.run(MessagingAppApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(MessagingAppApplication.class, args);
+  }
 }

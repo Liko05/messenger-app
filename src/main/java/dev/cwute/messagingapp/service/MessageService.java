@@ -6,17 +6,15 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
-/**
- * Service for message operations.
- */
+/** Service for message operations. */
 public interface MessageService {
-    long send(MessageDto messageDto, HttpServletRequest httpServletRequest);
+  long send(MessageDto messageDto, HttpServletRequest httpServletRequest);
 
-    List<MessageView> getReceivedMessagesForUser(HttpServletRequest httpServletRequest);
+  List<MessageView> getReceivedMessagesForUser(HttpServletRequest httpServletRequest);
 
-    List<MessageView> getSentMessagesForUser(HttpServletRequest httpServletRequest);
+  List<MessageView> getSentMessagesForUser(HttpServletRequest httpServletRequest);
 
-    void removeReceivedMessage(HttpServletRequest httpServletRequest, long messageId);
+  void removeReceivedMessage(HttpServletRequest httpServletRequest, long messageId);
 
-    void deleteSentMessage(HttpServletRequest httpServletRequest, long messageId);
+  void deleteSentMessage(HttpServletRequest httpServletRequest, long messageId);
 }
