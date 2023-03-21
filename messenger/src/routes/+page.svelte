@@ -4,7 +4,7 @@
 
   function handleSubmission() {
     console.log(username, password)
-    fetch('https://mess-api.cwute.dev/api/v1/users/login', {
+    fetch('http://localhost:1567/api/v1/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -6,7 +6,7 @@
 
   onMount(async () => {
     const response = await fetch(
-      'https://mess-api.cwute.dev/api/v1/messages/received',
+      'http://localhost:1567/api/v1/messages/received',
       {
         method: 'GET',
         headers: {
@@ -18,7 +18,7 @@
     console.log(messages)
 
     const responseSent = await fetch(
-      'https://mess-api.cwute.dev/api/v1/messages/sent',
+      'http://localhost:1567/api/v1/messages/sent',
       {
         method: 'GET',
         headers: {
@@ -29,7 +29,7 @@
     sentMessages = await responseSent.json()
     console.log(sentMessages)
 
-    const responseUsernames = await fetch('https://mess-api.cwute.dev/api/v1/users', {
+    const responseUsernames = await fetch('http://localhost:1567/api/v1/users', {
       method: 'GET',
       headers: {
         Credentials: sessionStorage.getItem('token'),
@@ -40,7 +40,7 @@
   })
 
   function deleteSent(id) {
-    fetch('https://mess-api.cwute.dev/api/v1/messages/sent/' + id, {
+    fetch('http://localhost:1567/api/v1/messages/sent/' + id, {
       method: 'DELETE',
       headers: {
         Credentials: sessionStorage.getItem('token'),
@@ -58,7 +58,7 @@
   }
 
   function deleteReceived(id) {
-    fetch('https://mess-api.cwute.dev/api/v1/messages/received/' + id, {
+    fetch('http://localhost:1567/api/v1/messages/received/' + id, {
       method: 'DELETE',
       headers: {
         Credentials: sessionStorage.getItem('token'),
@@ -80,7 +80,7 @@
   let recipients
 
   function sendMessage() {
-    fetch('https://mess-api.cwute.dev/api/v1/messages/send', {
+    fetch('http://localhost:1567/api/v1/messages/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
